@@ -1,0 +1,52 @@
+﻿Personlig målplan: Jesper Lindberg
+
+
+Yrkesroll: Backend utvecklare med AI kompetens
+I yrkesrollen har vi några enkla komponenter som delas av de flesta arbetsplatser i branschen:
+1. kunskap inom utveckling fördelaktigt Python då majoriteten av all AI utveckling sker därigenom men även fördelaktigt att ha kompetens i andra språk såsom Golang.
+2. Förståelse av LLM och deep learning då vi ser idag att framtidens AI utveckling kommer att vara någon form av LLM samtidigt som det är mycket viktigt att hålla sig uppdaterad av vad som händer i AI världen. 
+3. Kunna hantera databaser samt kunskap i till exempel. SQL.
+4. Förmåga att ta in kunskap, förstå dokumentation.
+5. Störst av allt är ett driv att lära sig samt en nyfikenhet nog för att sticka ut från mängden. 
+Lia: Capgemini samt Blocket/Schibsted: 
+
+
+De två företagen som jag har mest fokus på angående Lia är Capgemini samt Blocket. 
+Blocket då jag idag redan är anställd där samt har tidigare praktiserat som utvecklare. 
+Jag vet att Blocket dessutom arbetar hårt med att hitta nya intressanta sätt att få in AI som en del av sin digitala produkt samt att jag med erfarenhet vet att Blocket är en arbetsplats där man växer samt har möjlighet att utvecklas som utvecklare. 
+Jag har idag pratat med några av mina kontakter hos Blocket att jag blivit hänvisad till att prata med ett team som jag tror har alla de möjligheter som jag önskar mig av en LIA. Nu gäller det att vara snabb på bollen och få bollen att rulla. Jag vill även säkerställa ifall Blocket kommer kunna ge mig en anställning som utvecklare efter min LIA period innan jag helt låser in mig hos dem. 
+
+
+Det andra alternativet jag håller ögonen på är Capgemini. De har genom rykten från andra men även efter att jag fört dialog med dem visat en arbetskultur som verkligen faller mig i smaken. Capgemini har dessutom oändliga möjligheter när det kommer till att ta certifikat samt välja vilken riktning man senare vill ta i karriären. 
+Angående Capgemini så försöker jag hålla mig väldigt uppdaterad genom Linkedin samt jag har även fått kontakt med en som hanterar rekryteringsprocessen. Planen just nu är dock att göra en LIA ansökan med ett så väl skräddarsytt personligt brev som möjligt samt fräscha upp mina kunskaper om SQL då jag vet efter konversation med dem att den tekniska intervjun kommer testa just de kunskaperna.
+
+
+Personliga styrkor:
+Min största styrka är min nyfikenhet. Jag har ett driv av att lära mig nya saker och är heller inte rädd för att kolla upp hur saker fungerar både i ett mer abstraherat perspektiv men även detaljerat där jag känner att behovet finns. 
+
+Jag har även tidigare erfarenhet av hur det är att faktiskt arbeta som en utvecklare i ett team samt erfarenhet av att förhålla mig till en handledare och ta in deras kunskaper. 
+Jag har även erfarenhet med arbete inom pedagogik samt team leading visar på att jag vet hur man arbetar i ett team samt förhåller sig i olika professionella sammanhang.
+
+Som en sista styrka vill jag även uttrycka att då jag har tidigare erfarenhet så har jag en väldigt stabil grund samt generellt sett en högre kunskapsnivå än vad som förväntas av en LIA student. Vet att jag självklart inte är den enda i Nackademin och min klass som har denna förutsättning men jag hoppas att det ändå är något som kommer få mig att sticka ut från mängden. 
+
+
+Vad krävs av mig?: 
+mjuka kompetenser:
+Lång historia kort är att jag måste visa framfötterna. Vara snabb på att agera och visa att jag verkligen har ett sug att lära mig och att utvecklas. 
+Förmåga att arbeta i team samt i grupp kunna lösa diverse uppgifter.
+Förmåga att kunna kommunicera.
+Hårda kompetenser:
+Kunskap inom databas (SQL).
+Python utveckling.
+Kunskap inom modern AI såsom LLM samt deep learning.
+kravbild: 
+I en så pass extremt föränderlig arbetsplats som just utveckling men även mer nu med AI innebär att det är viktigt att vara driven och ha möjlighet att se allt som ett tillfälle att lära sig.
+Kommunikation kommer dessutom alltid vara en extremt viktig förmåga då du aldrig kommer att kunna allt så finns det 100% någon i ens arbetsliv som säkert sitter på den information du söker plus att kommunikation är viktigt för att man ska klara att arbeta i ett team.
+
+
+Utöver detta så anser jag att de hårda värdena säger lite själv varför de är ett krav.. Men för att ändå göra ett litet förtydligande så är de hårda kraven viktiga då de representerar en bas som vi förväntas stå på. Python då det är det ledande språket inom just AI utveckling. SQL då vi behöver kunna hantera, omvandla, förflytta samt tvätta data.
+
+
+Stöd i mitt sökande av LIA plats:
+Det stöd jag behöver är att Nackademin ger mig möjligheten att lära mig de hårda kompetenser som krävs för att jag ska kunna vara attraktiv på arbetsmarknaden. Utöver det behövs det även stöd i hur man som mest effektivt söker jobb samt en kickstart på vägen i att faktiskt söka samt komma i kontakt med olika arbetsgivare. 
+I regel anser jag även att detta är något vi får.
