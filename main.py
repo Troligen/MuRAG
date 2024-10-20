@@ -2,7 +2,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-from ingestion.document_loader import process_document
+from ingestion.document_loader import process_directory
 from rag.generator import query_rag, setup_rag_pipeline
 from rag.retriever import setup_retriever
 from utils.embedding import setup_embedding_and_vectorstore
@@ -12,23 +12,27 @@ load_dotenv()
 
 
 def main():
-    # Process documents
-    test_file = (
-        PROJECT_ROOT / "test_data" / "science_pdf" / "1-s2.0-S2212096323000189-main.pdf"
-    )
-    chunks = process_document(test_file)
-    print(f"Number of chunks: {len(chunks)}")
+    # Directory to process
+    data_directory = PROJECT_ROOT / "test_data"
+
+    # Process all documents in the directory and its subdirectories
+    print("Processing documents...")
+    all_chunks = process_directory(data_directory)
+    print(f"Total number of chunks processed: {len(all_chunks)}")
 
     # Setup embedding and vector store
-    vectorstore = setup_embedding_and_vectorstore(chunks)
+    print("Setting up embedding and vector store...")
+    vectorstore = setup_embedding_and_vectorstore(all_chunks)
 
     # Setup retriever and RAG pipeline
+    print("Setting up retriever and RAG pipeline...")
     retriever = setup_retriever(vectorstore)
     qa_chain = setup_rag_pipeline(retriever)
 
     # Simple interface for testing
+    print("\nRAG system is ready. You can now ask questions about the documents.")
     while True:
-        query = input("Enter your question (or 'quit' to exit): ")
+        query = input("\nEnter your question (or 'quit' to exit): ")
         if query.lower() == "quit":
             break
 
