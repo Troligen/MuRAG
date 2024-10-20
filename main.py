@@ -3,7 +3,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 from ingestion.document_loader import process_directory
-from rag.generator import query_rag, setup_rag_pipeline
+from rag.generator import query_rag, reciprocal_rank_fusion, setup_rag_pipeline
 from rag.retriever import setup_retriever
 from utils.embedding import setup_embedding_and_vectorstore
 
@@ -27,7 +27,7 @@ def main():
     # Setup retriever and RAG pipeline
     print("Setting up retriever and RAG pipeline...")
     retriever = setup_retriever(vectorstore)
-    qa_chain = setup_rag_pipeline(retriever)
+    qa_chain = setup_rag_pipeline(retriever, reciprocal_rank_fusion)
 
     # Simple interface for testing
     print("\nRAG system is ready. You can now ask questions about the documents.")
@@ -36,14 +36,8 @@ def main():
         if query.lower() == "quit":
             break
 
-        answer, sources = query_rag(qa_chain, query)
+        answer = query_rag(qa_chain, query)
         print(f"\nAnswer: {answer}\n")
-        print("Sources:")
-        for i, doc in enumerate(sources):
-            print(
-                f"Source {i+1}: {doc.metadata['source']} (page {doc.metadata.get('page', 'N/A')})"
-            )
-        print("\n")
 
 
 if __name__ == "__main__":

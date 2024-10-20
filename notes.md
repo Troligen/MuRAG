@@ -1,7 +1,5 @@
 # RAG
-
 ## Main Components
-
 ### Indexing
 
 [Document Loading:]
@@ -193,7 +191,7 @@ retriever = vectorstore.as_retriever()
 
 [How to think about it]
 
-> Imagein a 3d space - we embedd the doccument somwere in 3d space.
+> Imagein a 3d space - we embedd the document somwere in 3d space.
 > We then make a search query and embedd the search query in 3d space.
 > Afterwards we make a similarity surch with the embedded query
 > And this allowes os to retriewe the closest 1 - 1000000+ documents
@@ -445,9 +443,9 @@ template = """Answer the following question based on this context:
 Question: {question}
 """
 
-prompt =ChatPromptTemplate.from_template(template)
+prompt = ChatPromptTemplate.from_template(template)
 
-finaö_rag_chain = (
+final_rag_chain = (
     {"context": retrieval_chain_rag_fusion,
      "question": itemgetter("question")}
     | prompt
