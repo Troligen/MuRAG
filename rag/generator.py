@@ -1,8 +1,9 @@
 from operator import itemgetter
 
+from langchain.chains import create_history_aware_retriever
 from langchain_core.load import dumps, loads
 from langchain_core.output_parsers import StrOutputParser
-from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_openai import ChatOpenAI
 
 # from langchain_core.runnables import RunnablePassthrough
@@ -47,10 +48,32 @@ def reciprocal_rank_fusion(results: list[list], k=60):
 def setup_rag_pipeline(retriever, reciprocal_rank_fusion):
     llm = ChatOpenAI(model="gpt-4o-mini", temperature=1)
 
+    contextualize_q_system_prompt = """Given a chat history and the latest user question
+    which might reference context in the chat history,
+    formulate a standalone question which can be understood
+    without the chat history. Do NOT answer the question, 
+    just reformulate it if needed and otherwise return it as is."""
+
+    template = """Use the following pieces of context to answer the question at the end. 
+    If you don't know the answer, just say that you don't know, don't try to make up an answer. 
+    {context}
+
+    Question: {question}
+    Helpful Answer:"""
+
     rag_fusion_template = """You are a helpful assistant that generates multiple search queries based of a single input query. \n
     Generate multiple search queries related to: {question} \n
     output: (4 queries):
     """
+
+    contextualize_q_prompt = ChatPromptTemplate.from_messages(
+        [
+            ("system", contextualize_q_system_prompt),
+            MessagesPlaceholder("chat_history"),
+            ("human", "{input}"),
+        ]
+    )
+
     prompt_rag_fusion = ChatPromptTemplate.from_template(rag_fusion_template)
 
     generate_queries = (
@@ -63,13 +86,6 @@ def setup_rag_pipeline(retriever, reciprocal_rank_fusion):
     retrieval_chain_rag_fusion = (
         generate_queries | retriever.map() | reciprocal_rank_fusion
     )
-
-    template = """Use the following pieces of context to answer the question at the end. 
-    If you don't know the answer, just say that you don't know, don't try to make up an answer. 
-    {context}
-
-    Question: {question}
-    Helpful Answer:"""
 
     prompt = ChatPromptTemplate.from_template(template)
 

@@ -1,19 +1,16 @@
 from langchain.retrievers import ContextualCompressionRetriever
-from langchain.retrievers.document_compressors.chain_extract import \
-    LLMChainExtractor
-from langchain_openai import ChatOpenAI
+from langchain_cohere import CohereRerank
 
 
 def setup_retriever(vectorstore):
-    base_retriever = vectorstore.as_retriever(
-        search_type="similarity", search_kwargs={"k": 8}
+
+    retriever = vectorstore.as_retriever(
+        search_type="similarity", search_kwargs={"k": 20}
     )
 
-    # llm = ChatOpenAI(temperature=0, model="gpt-3.5-turbo")
-    # compressor = LLMChainExtractor.from_llm(llm)
+    compressor = CohereRerank(model="rerank-multilingual-v3.0")
+    compression_retriever = ContextualCompressionRetriever(
+        base_compressor=compressor, base_retriever=retriever
+    )
 
-    # compression_retriever = ContextualCompressionRetriever(
-    #    base_compressor=compressor, base_retriever=base_retriever
-    # )
-
-    return base_retriever
+    return compression_retriever

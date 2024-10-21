@@ -1,5 +1,7 @@
 # RAG
+
 ## Main Components
+
 ### Indexing
 
 [Document Loading:]
@@ -762,25 +764,29 @@ final_rag_chain.invoke({"context":retireved_docs,"question":question})
 
 ## Routing
 
-Routing as a concept is as simply as it sounds like just routing, depending of the questions context, where should
+Routing as a concept is as simply as it sounds just routing. Depending of the questions context, where should
 we then route the query to generate the correct documents? Different types of documents require different type of storage
-for optimal retrieval and it's the routers job to figure out where we should query the documents from.
+or prompts for optimal retrieval and it's the routers job to figure out where we should query the documents from.
 There's also the idea of taking the question and then rout it to pre-embedded prompts which is another part
 of the routing strategies
 
 - Routes:
 
   - Logical Routing
+
     - giving and LLM the knowledge of what data sources
       we can retrieve from and then letting it reason
       about what data source to use depending on the question
 
   - Semantic Routing
-    - The idea here is that this allow us to change systempromp
+    - The idea here is that this allow us to change systemprompt
       based of what the question is that has been asked. So we
       don't just query documents but we also query a system prompt
       to be used for the LLM. In other words we route what prompt to
-      use based of the semantic meaning of the question/query
+      use based of the semantic meaning of the question/query.
+      This differ from Logical Routing in that we embedd the prompts
+      and then do a similarity search to see which prompt is the closest
+      do the question.
 
 ### Logical Routing
 
@@ -1013,5 +1019,3 @@ structured_llm = llm.with_structured_output(TutorialSearch)
 query_analyzer = prompt | structured_llm
 
 ```
-
-
