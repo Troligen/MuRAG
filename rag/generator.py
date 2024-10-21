@@ -2,9 +2,10 @@ from operator import itemgetter
 
 from langchain_core.load import dumps, loads
 from langchain_core.output_parsers import StrOutputParser
-from langchain_core.prompts import ChatPromptTemplate, PromptTemplate
-from langchain_core.runnables import RunnablePassthrough
+from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
+
+# from langchain_core.runnables import RunnablePassthrough
 
 
 def format_docs(docs):
@@ -30,7 +31,7 @@ def reciprocal_rank_fusion(results: list[list], k=60):
             if doc_str not in fused_scores:
                 fused_scores[doc_str] = 0
             # Retrieve the current score of the document, if any
-            previous_score = fused_scores[doc_str]
+            # previous_score = fused_scores[doc_str]
             # Update the score of the document using the RRF formula: 1 / (rank + k)
             fused_scores[doc_str] += 1 / (rank + k)
 
@@ -44,16 +45,19 @@ def reciprocal_rank_fusion(results: list[list], k=60):
 
 
 def setup_rag_pipeline(retriever, reciprocal_rank_fusion):
-    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
+    llm = ChatOpenAI(model="gpt-4o-mini", temperature=1)
 
-    rag_fusion_template = """You are a hekpful assistant that generates multiple search queries based of a single input query. \n
+    rag_fusion_template = """You are a helpful assistant that generates multiple search queries based of a single input query. \n
     Generate multiple search queries related to: {question} \n
     output: (4 queries):
     """
     prompt_rag_fusion = ChatPromptTemplate.from_template(rag_fusion_template)
 
     generate_queries = (
-        prompt_rag_fusion | llm | StrOutputParser() | (lambda x: x.split("\n"))
+        prompt_rag_fusion
+        | ChatOpenAI(model="gpt-3.5-turbo", temperature=0)
+        | StrOutputParser()
+        | (lambda x: x.split("\n"))
     )
 
     retrieval_chain_rag_fusion = (
@@ -66,11 +70,6 @@ def setup_rag_pipeline(retriever, reciprocal_rank_fusion):
 
     Question: {question}
     Helpful Answer:"""
-
-    # QA_CHAIN_PROMPT = PromptTemplate(
-    #    input_variables=["context", "question"],
-    #    template=template,
-    # )
 
     prompt = ChatPromptTemplate.from_template(template)
 

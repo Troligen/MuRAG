@@ -771,7 +771,6 @@ of the routing strategies
 - Routes:
 
   - Logical Routing
-
     - giving and LLM the knowledge of what data sources
       we can retrieve from and then letting it reason
       about what data source to use depending on the question

@@ -6,7 +6,7 @@ from langchain_openai import ChatOpenAI
 
 def setup_retriever(vectorstore):
     base_retriever = vectorstore.as_retriever(
-        search_type="similarity", search_kwargs={"k": 4}
+        search_type="similarity", search_kwargs={"k": 8}
     )
 
     # llm = ChatOpenAI(temperature=0, model="gpt-3.5-turbo")
