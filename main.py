@@ -1,9 +1,10 @@
 from pathlib import Path
+from pprint import pprint
 
 from dotenv import load_dotenv
 
 from ingestion.document_loader import process_directory
-from rag.generator import query_rag, reciprocal_rank_fusion, setup_rag_pipeline
+from rag.generator import reciprocal_rank_fusion, setup_rag_pipeline
 from rag.retriever import setup_retriever
 from utils.embedding import setup_embedding_and_vectorstore
 
@@ -27,17 +28,25 @@ def main():
     # Setup retriever and RAG pipeline
     print("Setting up retriever and RAG pipeline...")
     retriever = setup_retriever(vectorstore)
-    qa_chain = setup_rag_pipeline(retriever, reciprocal_rank_fusion)
+    app = setup_rag_pipeline(retriever, reciprocal_rank_fusion)
 
     # Simple interface for testing
     print("\nRAG system is ready. You can now ask questions about the documents.")
     while True:
         query = input("\nEnter your question (or 'quit' to exit): ")
+
         if query.lower() == "quit":
             break
 
-        answer = query_rag(qa_chain, query)
-        print(f"\nAnswer: {answer}\n")
+        for output in app.stream({"question": query}):
+            for key, value in output.items():
+                # Node
+                pprint(f"Node '{key}':")
+                # Optional: print full state at each node
+                # pprint(value["key"], indent=2, width=80, depth=None)
+                if key == "generate":
+                    print(f"\n\n\nLLM Answer: {value["generation"]}\n\n\n")
+            pprint("\n---\n")
 
 
 if __name__ == "__main__":
