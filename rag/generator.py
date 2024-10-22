@@ -1,7 +1,6 @@
 from operator import itemgetter
 
-from langchain.chains import create_history_aware_retriever
-from langchain_core.load import dumps, loads
+from langchain.load import dumps, loads
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_openai import ChatOpenAI
