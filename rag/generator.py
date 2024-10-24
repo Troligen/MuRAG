@@ -1,4 +1,4 @@
-from typing import List
+from typing import Dict, List
 
 from langchain.load import dumps, loads
 from langchain.schema import Document
@@ -36,6 +36,10 @@ class GraphState(TypedDict):
     documents: List[str]
 
 
+class MessageDict(BaseModel):
+    pass
+
+
 def reciprocal_rank_fusion(results: list[list], k=60):
     """
     Reciprocal_rank_fusion that takes multiple lists of ranked documents
@@ -66,6 +70,23 @@ def reciprocal_rank_fusion(results: list[list], k=60):
     ]
 
     return reranked_results
+
+
+class Pipeline(StateGraph):
+    def __init__(
+        self,
+        state,
+        web_search_tool=TavilySearchResults(max_results=5, search_depth="advanced"),
+    ):
+        super().__init__(state)
+
+        self.llm_4 = ChatOpenAI(model="gpt-4o-mini", temperature=1)
+        self.llm_3 = ChatOpenAI(model="gpt-3.5-turbo", temperature=0)
+        self.llm_f = ChatOpenAI(model="gpt-3.5-turbo-0125", temperature=0)
+
+        self.structured_llm_grader = self.llm_f.with_structured_output(GradeDocuments)
+
+        self.web_search_tool = web_search_tool
 
 
 def setup_rag_pipeline(retriever, reciprocal_rank_fusion):
