@@ -7,7 +7,7 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
 from langgraph.graph import END, START, StateGraph
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, validate_call
 from typing_extensions import TypedDict
 
 
@@ -36,46 +36,19 @@ class GraphState(TypedDict):
     documents: List[str]
 
 
-class MessageDict(BaseModel):
-    pass
+class Prompts(BaseModel):
+    grader_system: str
+    rewrite_system: str
+    template: str
+    rag_fusion_template: str
 
 
-def reciprocal_rank_fusion(results: list[list], k=60):
-    """
-    Reciprocal_rank_fusion that takes multiple lists of ranked documents
-    and an optional parameter k used in the RRF formula
-    """
-
-    # Initialize a dictionary to hold fused scores for each unique document
-    fused_scores = {}
-
-    # Iterate through each list of ranked documents
-    for docs in results:
-        # Iterate through each document in the list, with its rank (position in the list)
-        for rank, doc in enumerate(docs):
-            # Convert the document to a string format to use as a key (assumes documents can be serialized to JSON)
-            doc_str = dumps(doc)
-            # If the document is not in the fused_scores dictionary, add it with an inital score of 0
-            if doc_str not in fused_scores:
-                fused_scores[doc_str] = 0
-            # Retrieve the current score of the document, if any
-            # previous_score = fused_scores[doc_str]
-            # Update the score of the document using the RRF formula: 1 / (rank + k)
-            fused_scores[doc_str] += 1 / (rank + k)
-
-    # Sort the documents based of their ranked score in decending order to get the final reranked result
-    reranked_results = [
-        (loads(doc), score)
-        for doc, score in sorted(fused_scores.items(), key=lambda x: x[1], reverse=True)
-    ]
-
-    return reranked_results
-
-
+@validate_call
 class Pipeline(StateGraph):
     def __init__(
         self,
         state,
+        prompts: Prompts,
         web_search_tool=TavilySearchResults(max_results=5, search_depth="advanced"),
     ):
         super().__init__(state)
@@ -84,9 +57,52 @@ class Pipeline(StateGraph):
         self.llm_3 = ChatOpenAI(model="gpt-3.5-turbo", temperature=0)
         self.llm_f = ChatOpenAI(model="gpt-3.5-turbo-0125", temperature=0)
 
+        self.prompts = prompts
+        self.web_search_tool = web_search_tool
         self.structured_llm_grader = self.llm_f.with_structured_output(GradeDocuments)
 
-        self.web_search_tool = web_search_tool
+        self.grade_prompt = ChatPromptTemplate.from_messages(
+            [
+                ("system", self.prompts.grader_system),
+                (
+                    "human",
+                    "Retrieved document: \n\n {document} \n\n User question: {question}",
+                ),
+            ]
+        )
+
+    def reciprocal_rank_fusion(self, results: list[list], k=60):
+        """
+        Reciprocal_rank_fusion that takes multiple lists of ranked documents
+        and an optional parameter k used in the RRF formula
+        """
+
+        # Initialize a dictionary to hold fused scores for each unique document
+        fused_scores = {}
+
+        # Iterate through each list of ranked documents
+        for docs in results:
+            # Iterate through each document in the list, with its rank (position in the list)
+            for rank, doc in enumerate(docs):
+                # Convert the document to a string format to use as a key (assumes documents can be serialized to JSON)
+                doc_str = dumps(doc)
+                # If the document is not in the fused_scores dictionary, add it with an inital score of 0
+                if doc_str not in fused_scores:
+                    fused_scores[doc_str] = 0
+                # Retrieve the current score of the document, if any
+                # previous_score = fused_scores[doc_str]
+                # Update the score of the document using the RRF formula: 1 / (rank + k)
+                fused_scores[doc_str] += 1 / (rank + k)
+
+        # Sort the documents based of their ranked score in decending order to get the final reranked result
+        reranked_results = [
+            (loads(doc), score)
+            for doc, score in sorted(
+                fused_scores.items(), key=lambda x: x[1], reverse=True
+            )
+        ]
+
+        return reranked_results
 
 
 def setup_rag_pipeline(retriever, reciprocal_rank_fusion):
@@ -142,15 +158,6 @@ def setup_rag_pipeline(retriever, reciprocal_rank_fusion):
     Generate multiple search queries related to: {question} \n
     output: (4 queries):
     """
-
-    def capture_documents(query_results):
-        # Access and store the documents from the retriever
-        retrieved_docs = []
-        for result in query_results:
-            retrieved_docs.extend(result["source_documents"])  # Extract documents
-
-        # Return both the documents and the query results for further steps in the chain
-        return {"query_results": query_results, "documents": retrieved_docs}
 
     prompt_rag_fusion = ChatPromptTemplate.from_template(rag_fusion_template)
 
