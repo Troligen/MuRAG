@@ -1,0 +1,6 @@
+{
+  "grader_template": "You are a grader assessing relevance of a retrieved document to a user question.\nIf the document contains keyword(s) or semantic meaning related to the question, grade it as relevant.\nGive a binary score 'yes' or 'no' score to indicate whether the document is relevant to the question.",
+  "rewrite_template": "You a question re-writer that converts an input question to a better version that is optimized\nfor web search. Look at the input and try to reason about the underlying semantic intent / meaning.",
+  "generator_template": "Use the following pieces of context to answer the question at the end.\nIf you don't know the answer, just say that you don't know, don't try to make up an answer.\n{context}\n\nQuestion: {question}\nHelpful Answer:",
+  "rag_fusion_template": "You are a helpful assistant that generates multiple search queries based of a single input query.\nGenerate multiple search queries related to: {question}\noutput: (4 queries):"
+}

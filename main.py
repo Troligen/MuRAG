@@ -1,10 +1,11 @@
+import json
 from pathlib import Path
 from pprint import pprint
 
 from dotenv import load_dotenv
 
 from ingestion.document_loader import process_directory
-from rag.generator import reciprocal_rank_fusion, setup_rag_pipeline
+from rag.generator import Pipeline
 from rag.retriever import setup_retriever
 from utils.embedding import setup_embedding_and_vectorstore
 
@@ -28,7 +29,10 @@ def main():
     # Setup retriever and RAG pipeline
     print("Setting up retriever and RAG pipeline...")
     retriever = setup_retriever(vectorstore)
-    app = setup_rag_pipeline(retriever, reciprocal_rank_fusion)
+    with open("prompts/prompts_templates.json", "r") as f:
+        templates = json.load(f)
+    pipeline = Pipeline(retriever, templates)
+    app = pipeline.compile_graph()
 
     config = {"configurable": {"thread_id": "1"}}
 
