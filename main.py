@@ -34,6 +34,8 @@ def main():
     pipeline = Pipeline(retriever, templates)
     app = pipeline.compile_graph()
 
+    config = {"configurable": {"thread_id": "1"}}
+
     # Simple interface for testing
     print("\nRAG system is ready. You can now ask questions about the documents.")
     while True:
@@ -42,7 +44,7 @@ def main():
         if query.lower() == "quit":
             break
 
-        for output in app.stream({"question": query}):
+        for output in app.stream({"question": query}, config):
             for key, value in output.items():
                 # Node
                 pprint(f"Node '{key}':")

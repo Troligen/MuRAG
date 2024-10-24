@@ -6,7 +6,8 @@ from langchain_community.tools.tavily_search import TavilySearchResults
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
-from langgraph.graph import END, START, StateGraph
+from langgraph.checkpoint.memory import MemorySaver
+from langgraph.graph import END, START, MessagesState, StateGraph
 from pydantic import BaseModel, Field
 from typing_extensions import TypedDict
 
@@ -327,3 +328,4 @@ class Pipeline(StateGraph):
         app = self.compile()
 
         return app
+
